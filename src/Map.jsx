@@ -76,10 +76,8 @@ function Map() {
     mapRef.current.getSource("highlighted-stop").setData(stop);
   };
 
-  // change weight
-  function handleWeightChange(e) {
-    setActiveWeight(e.target.value);
-  }
+  // change current weight from user selection 
+  const handleWeightChange = e => setActiveWeight(e.target.value);
 
   // update active stop when the url changes
   useEffect(() => {
@@ -433,14 +431,14 @@ function Map() {
 
           <div className="text-sm mb-2 outline-dotted rounded-md border my-3 p-3">
             Select the isochrone weight to display:
-            <br />
-            <input type="radio" name="weight" value="google" onChange={handleWeightChange} /> Scheduled<br />
-            <input type="radio" name="weight" value="mean" onChange={handleWeightChange} /> Average<br />
-            <input type="radio" name="weight" value="pct10" onChange={handleWeightChange} /> 10th Percentile<br />
+            <br /><br />
+            <input type="radio" name="weight" value="google" defaultChecked onChange={handleWeightChange} /> Scheduled - yeah, okay MTA<br />
+            <input type="radio" name="weight" value="mean" onChange={handleWeightChange} /> Average - expected but almost never happens<br />
+            <input type="radio" name="weight" value="pct10" onChange={handleWeightChange} /> 10th Percentile - you're living in subway heaven<br />
             <input type="radio" name="weight" value="pct25" onChange={handleWeightChange} /> 25th Percentile<br />
             <input type="radio" name="weight" value="pct50" onChange={handleWeightChange} /> 50th Percentile<br />
             <input type="radio" name="weight" value="pct75" onChange={handleWeightChange} /> 75th Percentile<br />
-            <input type="radio" name="weight" value="pct90" onChange={handleWeightChange} /> 90th Percentile<br />
+            <input type="radio" name="weight" value="pct90" onChange={handleWeightChange} /> 90th Percentile - worst commute ever<br />
           </div>
 
           {!station && (
