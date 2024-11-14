@@ -79,16 +79,6 @@ function Map() {
   // change weight
   function handleWeightChange(e) {
     setActiveWeight(e.target.value);
-    useEffect(() => {
-      if (!mapLoaded) return;
-      const map = mapRef.current;
-      if (activeWeight) {
-        const isochronePath = `/isochrones_${activeWeight}/${activeStopId}.geojson`;
-        map.getSource("isochrone").setData(isochronePath);
-      } else {
-        map.getSource("isochrone").setData(dummyFC);
-      }
-    }, [activeWeight]);
   }
 
   // update active stop when the url changes
@@ -398,12 +388,23 @@ function Map() {
     const map = mapRef.current;
     if (activeStopId) {
       const isochronePath = `/isochrones_${activeWeight}/${activeStopId}.geojson`;
-      // const isochronePath = `/isochrones/${activeStopId}.geojson`;
       map.getSource("isochrone").setData(isochronePath);
     } else {
       map.getSource("isochrone").setData(dummyFC);
     }
   }, [activeStopId]);
+
+  // when activeStopId changes, fetch isochrone data and update the isochrone source
+  useEffect(() => {
+    if (!mapLoaded) return;
+    const map = mapRef.current;
+    if (activeWeight) {
+      const isochronePath = `/isochrones_${activeWeight}/${activeStopId}.geojson`;
+      map.getSource("isochrone").setData(isochronePath);
+    } else {
+      map.getSource("isochrone").setData(dummyFC);
+    }
+  }, [activeWeight]);
 
   // stations is different from stops, and is used to render the StationHeader component
   const getStation = (stopId) =>
