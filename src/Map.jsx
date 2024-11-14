@@ -53,6 +53,7 @@ function Map() {
 
   const [activeStopId, setActiveStopId] = useState();
   const [highlightedStopId, setHighlightedStopId] = useState();
+  const [activeWeight, setActiveWeight] = useState("google");
 
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -74,6 +75,21 @@ function Map() {
     setHighlightedStopId(stop.properties.stopId);
     mapRef.current.getSource("highlighted-stop").setData(stop);
   };
+
+  // change weight
+  function handleWeightChange(e) {
+    setActiveWeight(e.target.value);
+    useEffect(() => {
+      if (!mapLoaded) return;
+      const map = mapRef.current;
+      if (activeWeight) {
+        const isochronePath = `/isochrones_${activeWeight}/${activeStopId}.geojson`;
+        map.getSource("isochrone").setData(isochronePath);
+      } else {
+        map.getSource("isochrone").setData(dummyFC);
+      }
+    }, [activeWeight]);
+  }
 
   // update active stop when the url changes
   useEffect(() => {
@@ -381,7 +397,8 @@ function Map() {
     if (!mapLoaded) return;
     const map = mapRef.current;
     if (activeStopId) {
-      const isochronePath = `/isochrones/${activeStopId}.geojson`;
+      const isochronePath = `/isochrones_${activeWeight}/${activeStopId}.geojson`;
+      // const isochronePath = `/isochrones/${activeStopId}.geojson`;
       map.getSource("isochrone").setData(isochronePath);
     } else {
       map.getSource("isochrone").setData(dummyFC);
@@ -413,9 +430,21 @@ function Map() {
             York City?
           </div>
 
+          <div className="text-sm mb-2 outline-dotted rounded-md border my-3 p-3">
+            Select the isochrone weight to display:
+            <br />
+            <input type="radio" name="weight" value="google" onChange={handleWeightChange} /> Scheduled<br />
+            <input type="radio" name="weight" value="mean" onChange={handleWeightChange} /> Average<br />
+            <input type="radio" name="weight" value="pct10" onChange={handleWeightChange} /> 10th Percentile<br />
+            <input type="radio" name="weight" value="pct25" onChange={handleWeightChange} /> 25th Percentile<br />
+            <input type="radio" name="weight" value="pct50" onChange={handleWeightChange} /> 50th Percentile<br />
+            <input type="radio" name="weight" value="pct75" onChange={handleWeightChange} /> 75th Percentile<br />
+            <input type="radio" name="weight" value="pct90" onChange={handleWeightChange} /> 90th Percentile<br />
+          </div>
+
           {!station && (
             <div
-              className=" text-sm mb-2 outline-dotted rounded-md border my-3 p-3"
+              className="text-sm mb-2 outline-dotted rounded-md border my-3 p-3"
               style={{ height: 95 }}
             >
               Hover over a station to see how much of the city is accessible

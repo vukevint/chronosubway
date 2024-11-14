@@ -1,3 +1,10 @@
+# Modifications
+
+- This project includes new isochrones based on subway data collected via [toddwschneider/nyc-subway-data](https://github.com/toddwschneider/nyc-subway-data), with data from 2024-01 to 2024-02 (to be edited with specific days). 
+- Original isochrone in `public/` is now suffixed with `_google`, and new isochrones are included with the appropriate weight suffixes (percentiles for 10, 25, 50, 75, and 90, and mean).
+- User has options to select between the available isochrone weights.
+- TODO: live update isochrone displayed on map for a given locked station when weight is change.
+
 # subwaysheds
 
 An interactive map for exploring transit accessibility in New York City, based on the style of [https://chronotrains.com](https://chronotrains.com)
